@@ -7,6 +7,7 @@ import {VectorWidget} from "cad/mdf/ui/VectorWidget";
 import {CheckboxWidget} from "cad/mdf/ui/CheckboxWidget";
 import {BooleanWidget} from "cad/mdf/ui/BooleanWidget";
 import {ChoiceWidget} from "cad/mdf/ui/ChoiceWidget";
+import {SubFormWidget} from "cad/mdf/ui/SubFormWidget";
 
 export const DynamicComponents = {
 
@@ -17,6 +18,8 @@ export const DynamicComponents = {
   'container': ContainerWidget,
 
   'group': GroupWidget,
+
+  'sub-form': SubFormWidget,
 
   'section': SectionWidget,
 

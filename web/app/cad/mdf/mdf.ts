@@ -7,13 +7,17 @@ import {resolveMDFIcon} from "./mdfIconResolver";
 import {OperationSchema} from "cad/craft/schema/schema";
 import {
   DynamicWidgetProps,
-  FieldWidgetProps, FormDefinition,
+  FieldWidgetProps,
+  FormDefinition,
   isContainerWidgetProps,
   isFieldWidgetProps,
+  isSubFormWidgetProps,
   UIDefinition
 } from "cad/mdf/ui/uiDefinition";
 import {uiDefinitionToReact} from "cad/mdf/ui/render";
 import {DynamicComponents} from "cad/mdf/ui/componentRegistry";
+import {ParamsPath} from "cad/craft/wizard/wizardTypes";
+import _ from "lodash";
 
 export interface MDFCommand<R> {
   id: string;
@@ -32,7 +36,7 @@ export function loadMDFCommand<R>(mdfCommand: MDFCommand<R>): OperationDescripto
     type: 'group',
     content: mdfCommand.form
   }
-  const {schema: derivedSchema, formFields} = deriveSchema(uiDefinition);
+  const {schema: derivedSchema} = deriveSchema(uiDefinition);
   return {
     id: mdfCommand.id,
     label: mdfCommand.label,
@@ -49,44 +53,47 @@ export function loadMDFCommand<R>(mdfCommand: MDFCommand<R>): OperationDescripto
     //   ...requiresFaceSelection(1)
     // },
     form: uiDefinitionToReact(uiDefinition),
-    formFields,
     schema: derivedSchema
   }
 }
 
-function extractFormFields(uiDefinition: UIDefinition): FieldWidgetProps[] {
-
-  const fields: FieldWidgetProps[] = [];
-
-  function inorder(comp: DynamicWidgetProps) {
+function traverseUIDefinition(uiDefinition: UIDefinition, onField: (pathPrefix: ParamsPath, comp: FieldWidgetProps) => void) {
+  function inorder(comp: DynamicWidgetProps, prefix: ParamsPath) {
 
     if (isFieldWidgetProps(comp)) {
-      fields.push(comp);
+      onField(prefix, comp);
     }
 
     if (isContainerWidgetProps(comp)) {
-      comp.content.forEach(inorder)
+      let subPrefix = prefix;
+      if (isSubFormWidgetProps(comp)) {
+        subPrefix = [...prefix, comp.name];
+      }
+      comp.content.forEach(comp => inorder(comp, subPrefix))
     }
   }
 
-  inorder(uiDefinition);
-
-  return fields;
+  inorder(uiDefinition, []);
 }
 
 export function deriveSchema(uiDefinition: UIDefinition): {
-  schema: OperationSchema,
-  formFields: FieldWidgetProps[]
+  schema: OperationSchema
 } {
-  const formFields: FieldWidgetProps[] = extractFormFields(uiDefinition)
-  const schema = {};
-  formFields.forEach(f => {
-    let propsToSchema = DynamicComponents[f.type].propsToSchema;
-    schema[f.name] = propsToSchema(schema, f as any);
+
+
+
+  const schema: OperationSchema = {};
+
+  traverseUIDefinition(uiDefinition, (prefix, field) => {
+    let propsToSchema = DynamicComponents[field.type].propsToSchema;
+    let fieldSchema = propsToSchema(schema, field as any);
+    _.set(schema, [...prefix, field.name], fieldSchema);
   });
+
+
+
   return {
-    schema,
-    formFields
+    schema
   };
 }
 

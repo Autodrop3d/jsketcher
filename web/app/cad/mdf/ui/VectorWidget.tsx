@@ -27,18 +27,26 @@ const VectorUIDefinition = (fieldName: string, label: string) => ({
 
   content: [
     {
-      name: fieldName+"/vectorEntity",
-      label: 'vector',
-      type: "selection",
-      capture: ENTITY_CAPTURE,
-      multi: false,
+      name: fieldName,
+      type: 'sub-form',
+      resolve: VectorResolver,
+      content: [
+        {
+          name: "vectorEntity",
+          label: 'vector',
+          type: "selection",
+          capture: ENTITY_CAPTURE,
+          multi: false,
+        },
+        {
+          name: "flip",
+          label: 'flip',
+          type: "checkbox",
+          defaultValue: false
+        }
+      ]
     },
-    {
-      name: fieldName+"/flip",
-      label: 'flip',
-      type: "checkbox",
-      defaultValue: false
-    }
+
   ]
 } as SectionWidgetProps);
 
@@ -53,6 +61,7 @@ export function VectorWidget(props: VectorWidgetProps) {
 VectorWidget.propsToSchema = (consumer: OperationSchema, props: VectorWidgetProps) => {
   return {
     type: Types.object,
+    resolve: VectorResolver,
     schema: {
       vectorEntity: {
         label: 'vector',
@@ -67,7 +76,7 @@ VectorWidget.propsToSchema = (consumer: OperationSchema, props: VectorWidgetProp
         optional: false
       }
     },
-    resolve: VectorResolver,
+
     ...fieldToSchemaGeneric(props),
   }
 };

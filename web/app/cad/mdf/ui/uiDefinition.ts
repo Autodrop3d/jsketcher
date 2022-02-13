@@ -8,10 +8,12 @@ import {CheckboxWidgetProps} from "cad/mdf/ui/CheckboxWidget";
 import {VectorWidgetProps} from "cad/mdf/ui/VectorWidget";
 import {BooleanWidgetProps} from "cad/mdf/ui/BooleanWidget";
 import {ChoiceWidgetProps} from "cad/mdf/ui/ChoiceWidget";
+import {SubFormWidgetProps} from "cad/mdf/ui/SubFormWidget";
 
-export type FieldWidgetProps = NumberWidgetProps | CheckboxWidgetProps | ChoiceWidgetProps | SelectionWidgetProps | VectorWidgetProps | BooleanWidgetProps;
+export type FieldWidgetProps = NumberWidgetProps | CheckboxWidgetProps | ChoiceWidgetProps | SelectionWidgetProps
+  | VectorWidgetProps | BooleanWidgetProps;
 
-export type BasicWidgetProps = ContainerWidgetProps | SectionWidgetProps | GroupWidgetProps;
+export type BasicWidgetProps = ContainerWidgetProps | SectionWidgetProps | GroupWidgetProps | SubFormWidgetProps;
 
 export type DynamicWidgetProps = FieldWidgetProps | BasicWidgetProps;
 
@@ -26,4 +28,8 @@ export function isContainerWidgetProps(comp: DynamicWidgetProps): comp is Contai
 
 export function isFieldWidgetProps(comp: DynamicWidgetProps): comp is FieldWidgetProps {
   return DynamicComponents[comp.type].propsToSchema !== undefined;
+}
+
+export function isSubFormWidgetProps(comp: DynamicWidgetProps): comp is SubFormWidgetProps {
+  return (comp as SubFormWidgetProps).type == 'sub-form';
 }
