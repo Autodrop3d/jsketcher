@@ -4,7 +4,9 @@ import {ArrayTypeSchema} from "cad/craft/schema/types/arrayType";
 import {ObjectTypeSchema} from "cad/craft/schema/types/objectType";
 import {StringTypeSchema} from "cad/craft/schema/types/stringType";
 import {BooleanTypeSchema} from "cad/craft/schema/types/booleanType";
-import {Types} from "cad/craft/schema/types";
+import {Materializer, Types} from "cad/craft/schema/types";
+import {CoreContext} from "context";
+import {ParamsPath} from "cad/craft/wizard/wizardTypes";
 
 export type Coercable = any;
 
@@ -29,6 +31,7 @@ export interface BaseSchemaField {
   defaultValue: OperationParamValue,
   optional: boolean,
   label?: string,
+  resolve?: ValueResolver
 }
 
 export type OperationParamPrimitive = number|boolean|string;
@@ -52,6 +55,15 @@ export type OperationParamsErrorReporter = ((msg: string) => void) & {
   dot: (pathPart: string|number) => OperationParamsErrorReporter
 };
 
+export type ValueResolver = (ctx: CoreContext,
+                               value: any,
+                               md: SchemaField,
+                               reportError: OperationParamsErrorReporter, materializer: Materializer) => any;
+
+export function flattenPath(path: ParamsPath): string {
+  return path.join('/');
+}
+
 export function schemaIterator(schema: OperationSchema,
                                callback: (path: string[], flattenedPath: string, field: PrimitiveSchemaField) => void) {
 
@@ -59,7 +71,7 @@ export function schemaIterator(schema: OperationSchema,
 
     Object.keys(schema).forEach(key => {
       const path = [...parentPath, key]
-      const flattenedPath = path.join('/');
+      const flattenedPath = flattenPath(path);
       const schemaField = schema[key];
 
 
@@ -76,7 +88,9 @@ export function schemaIterator(schema: OperationSchema,
 
 export function unwrapMetadata(fieldMd: SchemaField) {
   if (fieldMd.type === Types.array) {
-    return unwrapMetadata(fieldMd.items);
+    return unwrapMetadata(fieldMd.items||
+      (fieldMd as any).itemType // backward compatibility, remove me
+    );
   }
   return fieldMd;
 }

@@ -26,10 +26,6 @@ export default class Wizard extends React.Component {
     this.props.context.updateParam(name, value);
   };
 
-  setActiveParam = param => {
-    this.props.context.updateState(state => state.activeParam = param);
-  };
-
   componentDidCatch() {
     this.setState({hasInternalError: true});
   }

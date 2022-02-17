@@ -26,7 +26,7 @@ export function SelectionWidget(props: SelectionWidgetProps) {
   return <Entity name={props.name} label={props.label} />;
 }
 
-SelectionWidget.propsToSchema = (consumer: OperationSchema, props: SelectionWidgetProps) => {
+SelectionWidget.propsToSchema = (props: SelectionWidgetProps) => {
 
   let value = {
     type: Types.entity,

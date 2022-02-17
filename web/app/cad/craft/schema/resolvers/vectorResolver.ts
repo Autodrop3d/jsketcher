@@ -13,8 +13,7 @@ type VectorInput = {
 export function VectorResolver(ctx: CoreContext,
   value: VectorInput,
   md: ObjectTypeSchema,
-  reportError: OperationParamsErrorReporter,
-                              materializer: Materializer): Vector {
+  reportError: OperationParamsErrorReporter, materializer: Materializer): Vector {
 
   if (!value.vectorEntity) {
     return null;

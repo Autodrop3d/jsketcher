@@ -10,14 +10,11 @@ import {
   FieldWidgetProps,
   FormDefinition,
   isContainerWidgetProps,
-  isFieldWidgetProps,
-  isSubFormWidgetProps,
+  isFieldWidgetProps, isSubFormWidgetProps,
   UIDefinition
 } from "cad/mdf/ui/uiDefinition";
 import {uiDefinitionToReact} from "cad/mdf/ui/render";
-import {DynamicComponents} from "cad/mdf/ui/componentRegistry";
-import {ParamsPath} from "cad/craft/wizard/wizardTypes";
-import _ from "lodash";
+import {ComponentLibrary, DynamicComponents} from "cad/mdf/ui/componentRegistry";
 
 export interface MDFCommand<R> {
   id: string;
@@ -36,7 +33,7 @@ export function loadMDFCommand<R>(mdfCommand: MDFCommand<R>): OperationDescripto
     type: 'group',
     content: mdfCommand.form
   }
-  const {schema: derivedSchema} = deriveSchema(uiDefinition);
+  const derivedSchema = deriveSchema(uiDefinition);
   return {
     id: mdfCommand.id,
     label: mdfCommand.label,
@@ -57,44 +54,46 @@ export function loadMDFCommand<R>(mdfCommand: MDFCommand<R>): OperationDescripto
   }
 }
 
-function traverseUIDefinition(uiDefinition: UIDefinition, onField: (pathPrefix: ParamsPath, comp: FieldWidgetProps) => void) {
-  function inorder(comp: DynamicWidgetProps, prefix: ParamsPath) {
+function traverseUIDefinition(uiDefinition: UIDefinition|UIDefinition[], onField: (comp: FieldWidgetProps) => void) {
+  function inorder(comp: DynamicWidgetProps) {
+
+    const libraryItemFn = ComponentLibrary[comp.type];
+
+    if (libraryItemFn) {
+      const libraryItem = libraryItemFn(comp);
+      inorder(libraryItem)
+      return;
+    }
 
     if (isFieldWidgetProps(comp)) {
-      onField(prefix, comp);
+      onField(comp);
     }
 
     if (isContainerWidgetProps(comp)) {
-      let subPrefix = prefix;
-      if (isSubFormWidgetProps(comp)) {
-        subPrefix = [...prefix, comp.name];
+      if (!isSubFormWidgetProps(comp)) {
+        comp.content.forEach(comp => inorder(comp))
       }
-      comp.content.forEach(comp => inorder(comp, subPrefix))
     }
   }
 
-  inorder(uiDefinition, []);
+  if (Array.isArray(uiDefinition)) {
+    uiDefinition.forEach(def => traverseUIDefinition(def, onField));
+  } else {
+    inorder(uiDefinition);
+  }
 }
 
-export function deriveSchema(uiDefinition: UIDefinition): {
-  schema: OperationSchema
-} {
-
-
+export function deriveSchema(uiDefinition: UIDefinition): OperationSchema {
 
   const schema: OperationSchema = {};
 
-  traverseUIDefinition(uiDefinition, (prefix, field) => {
+  traverseUIDefinition(uiDefinition, (field) => {
     let propsToSchema = DynamicComponents[field.type].propsToSchema;
-    let fieldSchema = propsToSchema(schema, field as any);
-    _.set(schema, [...prefix, field.name], fieldSchema);
+    let fieldSchema = propsToSchema(field as any, deriveSchema);
+    schema[field.name] = fieldSchema;
   });
 
-
-
-  return {
-    schema
-  };
+  return schema;
 }
 
 

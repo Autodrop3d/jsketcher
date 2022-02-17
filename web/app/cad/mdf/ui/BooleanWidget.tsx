@@ -54,7 +54,7 @@ export function BooleanWidget(props: BooleanWidgetProps) {
   return <DynamicComponentWidget {...vectorUIDefinition} />
 }
 
-BooleanWidget.propsToSchema = (consumer: OperationSchema, props: BooleanWidgetProps) => {
+BooleanWidget.propsToSchema = (props: BooleanWidgetProps) => {
   return {
     type: Types.object,
     schema: {

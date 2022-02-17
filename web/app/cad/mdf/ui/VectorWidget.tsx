@@ -15,11 +15,11 @@ export interface VectorWidgetProps extends FieldBasicProps {
 
 const ENTITY_CAPTURE = [EntityKind.EDGE, EntityKind.SKETCH_OBJECT, EntityKind.DATUM_AXIS, EntityKind.FACE];
 
-const VectorUIDefinition = (fieldName: string, label: string) => ({
+export const VectorWidgetDefinition = ({name, label}: VectorWidgetProps) => ({
 
   type: 'section',
 
-  title: label,
+  title: label || name,
 
   collapsible: true,
 
@@ -27,7 +27,7 @@ const VectorUIDefinition = (fieldName: string, label: string) => ({
 
   content: [
     {
-      name: fieldName,
+      name: name,
       type: 'sub-form',
       resolve: VectorResolver,
       content: [
@@ -37,6 +37,7 @@ const VectorUIDefinition = (fieldName: string, label: string) => ({
           type: "selection",
           capture: ENTITY_CAPTURE,
           multi: false,
+          optional: true
         },
         {
           name: "flip",
@@ -46,39 +47,7 @@ const VectorUIDefinition = (fieldName: string, label: string) => ({
         }
       ]
     },
-
   ]
 } as SectionWidgetProps);
-
-
-export function VectorWidget(props: VectorWidgetProps) {
-
-  let vectorUIDefinition = VectorUIDefinition(props.name, props.label);
-
-  return <DynamicComponentWidget {...vectorUIDefinition} />
-}
-
-VectorWidget.propsToSchema = (consumer: OperationSchema, props: VectorWidgetProps) => {
-  return {
-    type: Types.object,
-    resolve: VectorResolver,
-    schema: {
-      vectorEntity: {
-        label: 'vector',
-        type: Types.entity,
-        allowedKinds: ENTITY_CAPTURE,
-        optional: true
-      },
-      flip: {
-        label: 'flip',
-        type: Types.boolean,
-        defaultValue: false,
-        optional: false
-      }
-    },
-
-    ...fieldToSchemaGeneric(props),
-  }
-};
 
 

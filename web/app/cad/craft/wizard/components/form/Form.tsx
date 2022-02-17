@@ -4,7 +4,7 @@ import Field from 'ui/components/controls/Field';
 import Stack from 'ui/components/Stack';
 import {camelCaseSplitToStr} from 'gems/camelCaseSplit';
 import {FlattenPath, ParamsPath, ParamsPathSegment, WizardContext} from "cad/craft/wizard/wizardTypes";
-import {OperationParamValue} from "cad/craft/schema/schema";
+import {flattenPath, OperationParamValue} from "cad/craft/schema/schema";
 
 export const FormContext: React.Context<FormContextData> = React.createContext(null);
 
@@ -60,12 +60,13 @@ interface FormFieldProps {
 }
 
 export function attachToForm(Control) {
-  return function FormField({name, fullPath, ...props}: FormFieldProps) {
+  return function FormField({name, ...props}: FormFieldProps) {
     return <FormContext.Consumer>
       {
         (ctx: FormContextData) => {
+          const fullPath = flattenPath([...ctx.prefix, name]);
           const onChange = val => ctx.updateParam(name, val);
-          const setActive = val => ctx.setActiveParam(fullPath);
+          const setActive = val => ctx.setActiveParam(val ? fullPath : undefined);
           return <React.Fragment>
             <Control value={ctx.readParam(name)}
                      onChange={onChange} 

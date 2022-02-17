@@ -25,7 +25,7 @@ export function ChoiceWidget(props: ChoiceWidgetProps) {
   }
 }
 
-ChoiceWidget.propsToSchema = (consumer: OperationSchema, props: ChoiceWidgetProps) => {
+ChoiceWidget.propsToSchema = (props: ChoiceWidgetProps) => {
   return {
     type: Types.string,
     enum: props.values,

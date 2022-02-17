@@ -62,11 +62,12 @@ function createPickHandlerFromSchema(wizCtx: WizardContext) {
   }
   return model => {
     const modelType = model.TYPE;
-    
-    const state = wizCtx.state$.value;
-    
+
     let {schemaIndex} = wizCtx.operation;
-    let activeEntityRef = () => schemaIndex.entitiesByFlattenedPaths[state.activeParam];
+    let activeEntityRef = () => {
+      const state = wizCtx.state$.value;
+      return schemaIndex.entitiesByFlattenedPaths[state.activeParam];
+    }
 
 
     function activeCanTakeIt(kind) {

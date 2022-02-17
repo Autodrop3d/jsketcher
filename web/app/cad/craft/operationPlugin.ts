@@ -150,6 +150,8 @@ function createSchemaIndex(schema: OperationSchema): SchemaIndex {
   const index = {
     fields: [],
     fieldsByFlattenedPaths: {},
+    entities: [],
+    entitiesByFlattenedPaths: {}
   } as SchemaIndex;
 
   schemaIterator(schema, (path, flattenedPath, metadata) => {
@@ -163,7 +165,6 @@ function createSchemaIndex(schema: OperationSchema): SchemaIndex {
 
   });
 
-  index.entities = [];
   index.fields.forEach(f => {
 
     const unwrappedMd = unwrapMetadata(f.metadata);
@@ -178,6 +179,7 @@ function createSchemaIndex(schema: OperationSchema): SchemaIndex {
     };
 
     index.entities.push(entity);
+    index.entitiesByFlattenedPaths[f.flattenedPath] = entity;
   });
 
   return index;
