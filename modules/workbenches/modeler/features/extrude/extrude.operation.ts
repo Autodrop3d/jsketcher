@@ -113,7 +113,6 @@ const ExtrudeOperation: MDFCommand<ExtrudeParams> = {
       name: 'boolean',
       label: 'boolean',
       optional: true,
-      defaultValue: 'NONE'
     }
 
   ],

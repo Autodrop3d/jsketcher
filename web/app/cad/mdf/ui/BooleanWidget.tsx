@@ -17,7 +17,7 @@ const ENTITY_CAPTURE = [EntityKind.SHELL];
 
 const BOOLEAN_OPTIONS = ['NONE', 'UNION', 'SUBTRACT', 'INTERSECT'];
 
-const BooleanUIDefinition = (fieldName: string, label: string) => ({
+export const BooleanWidgetDefinition = (fieldName: string, label: string) => ({
 
   type: 'section',
 
@@ -29,56 +29,28 @@ const BooleanUIDefinition = (fieldName: string, label: string) => ({
 
   content: [
     {
-      name: fieldName+"/kind",
-      label: 'kind',
-      type: "choice",
-      optional: true,
-      values: BOOLEAN_OPTIONS
+      type: 'sub-form',
+      name: 'boolean',
+      content: [
+        {
+          name: "kind",
+          label: 'kind',
+          type: "choice",
+          optional: true,
+          defaultValue: 'NONE',
+          values: BOOLEAN_OPTIONS
+        },
+        {
+          name: "targets",
+          label: 'target',
+          type: "selection",
+          capture: ENTITY_CAPTURE,
+          multi: true,
+          optional: true,
+        }
+
+      ]
     },
-    {
-      name: fieldName+"/targets",
-      label: 'target',
-      type: "selection",
-      capture: ENTITY_CAPTURE,
-      multi: true,
-      optional: true,
-    }
+
   ]
 } as SectionWidgetProps);
-
-
-export function BooleanWidget(props: BooleanWidgetProps) {
-
-  let vectorUIDefinition = BooleanUIDefinition(props.name, props.label);
-
-  return <DynamicComponentWidget {...vectorUIDefinition} />
-}
-
-BooleanWidget.propsToSchema = (props: BooleanWidgetProps) => {
-  return {
-    type: Types.object,
-    schema: {
-      kind: {
-        label: 'kind',
-        type: Types.string,
-        enum: BOOLEAN_OPTIONS,
-        defaultValue: props.defaultValue || 'NONE',
-        optional: false
-      },
-
-      targets: {
-        label: 'targets',
-        type: Types.array,
-        items: {
-          type: Types.entity,
-          allowedKinds: ENTITY_CAPTURE,
-        },
-        optional: true,
-        applicable: 'kind !== "NONE"'
-      }
-    },
-    ...fieldToSchemaGeneric(props),
-  }
-};
-
-

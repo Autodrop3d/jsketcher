@@ -5,9 +5,9 @@ import {GroupWidget} from "cad/mdf/ui/GroupWidget";
 import {SectionWidget} from "cad/mdf/ui/SectionWidget";
 import {VectorWidgetDefinition} from "cad/mdf/ui/VectorWidget";
 import {CheckboxWidget} from "cad/mdf/ui/CheckboxWidget";
-import {BooleanWidget} from "cad/mdf/ui/BooleanWidget";
 import {ChoiceWidget} from "cad/mdf/ui/ChoiceWidget";
 import {SubFormWidget} from "cad/mdf/ui/SubFormWidget";
+import {BooleanWidgetDefinition} from "cad/mdf/ui/BooleanWidget";
 
 export const DynamicComponents = {
 
@@ -25,12 +25,10 @@ export const DynamicComponents = {
 
   'checkbox': CheckboxWidget,
 
-  'boolean': BooleanWidget,
-
   'choice': ChoiceWidget,
-
 }
 
 export const ComponentLibrary = {
   'vector': VectorWidgetDefinition,
+  'boolean': BooleanWidgetDefinition
 };

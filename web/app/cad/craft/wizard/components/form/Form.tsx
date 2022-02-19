@@ -56,7 +56,9 @@ export function formField(Control) {
 
 interface FormFieldProps {
   name: ParamsPathSegment,
-  fullPath: FlattenPath
+  defaultValue: OperationParamValue,
+  label: string,
+  children: any
 }
 
 export function attachToForm(Control) {
