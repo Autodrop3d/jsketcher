@@ -3,7 +3,7 @@ import {SelectionWidget} from "cad/mdf/ui/SelectionWidget";
 import {ContainerWidget} from "cad/mdf/ui/ContainerWidget";
 import {GroupWidget} from "cad/mdf/ui/GroupWidget";
 import {SectionWidget} from "cad/mdf/ui/SectionWidget";
-import {VectorWidgetDefinition} from "cad/mdf/ui/VectorWidget";
+import {AxisWidgetDefinition} from "cad/mdf/ui/AxisWidget";
 import {CheckboxWidget} from "cad/mdf/ui/CheckboxWidget";
 import {ChoiceWidget} from "cad/mdf/ui/ChoiceWidget";
 import {SubFormWidget} from "cad/mdf/ui/SubFormWidget";
@@ -29,6 +29,6 @@ export const DynamicComponents = {
 }
 
 export const ComponentLibrary = {
-  'vector': VectorWidgetDefinition,
+  'axis': AxisWidgetDefinition,
   'boolean': BooleanWidgetDefinition
 };

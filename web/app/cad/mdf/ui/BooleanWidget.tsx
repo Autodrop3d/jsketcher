@@ -5,7 +5,7 @@ import {Types} from "cad/craft/schema/types";
 import {EntityKind} from "cad/model/entities";
 import {SectionWidgetProps} from "cad/mdf/ui/SectionWidget";
 import {DynamicComponentWidget} from "cad/mdf/ui/DynamicComponentWidget";
-import {VectorResolver} from "cad/craft/schema/resolvers/vectorResolver";
+import {AxisResolver} from "cad/craft/schema/resolvers/axisResolver";
 
 export interface BooleanWidgetProps extends FieldBasicProps {
 
@@ -17,11 +17,11 @@ const ENTITY_CAPTURE = [EntityKind.SHELL];
 
 const BOOLEAN_OPTIONS = ['NONE', 'UNION', 'SUBTRACT', 'INTERSECT'];
 
-export const BooleanWidgetDefinition = (fieldName: string, label: string) => ({
+export const BooleanWidgetDefinition = (props: BooleanWidgetProps) => ({
 
   type: 'section',
 
-  title: label,
+  title: props.label,
 
   collapsible: true,
 
@@ -30,7 +30,8 @@ export const BooleanWidgetDefinition = (fieldName: string, label: string) => ({
   content: [
     {
       type: 'sub-form',
-      name: 'boolean',
+      name: props.name,
+      optional: props.optional,
       content: [
         {
           name: "kind",

@@ -5,13 +5,13 @@ import {DynamicComponents} from "cad/mdf/ui/componentRegistry";
 import {ContainerWidgetProps} from "cad/mdf/ui/ContainerWidget";
 import {GroupWidgetProps} from "cad/mdf/ui/GroupWidget";
 import {CheckboxWidgetProps} from "cad/mdf/ui/CheckboxWidget";
-import {VectorWidgetProps} from "cad/mdf/ui/VectorWidget";
+import {AxisWidgetProps} from "cad/mdf/ui/AxisWidget";
 import {BooleanWidgetProps} from "cad/mdf/ui/BooleanWidget";
 import {ChoiceWidgetProps} from "cad/mdf/ui/ChoiceWidget";
 import {SubFormWidgetProps} from "cad/mdf/ui/SubFormWidget";
 
 export type FieldWidgetProps = NumberWidgetProps | CheckboxWidgetProps | ChoiceWidgetProps | SelectionWidgetProps
-  | VectorWidgetProps | BooleanWidgetProps;
+  | AxisWidgetProps | BooleanWidgetProps;
 
 export type BasicWidgetProps = ContainerWidgetProps | SectionWidgetProps | GroupWidgetProps | SubFormWidgetProps;
 

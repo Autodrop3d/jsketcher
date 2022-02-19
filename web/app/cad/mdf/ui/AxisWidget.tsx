@@ -5,17 +5,17 @@ import {Types} from "cad/craft/schema/types";
 import {EntityKind} from "cad/model/entities";
 import {SectionWidgetProps} from "cad/mdf/ui/SectionWidget";
 import {DynamicComponentWidget} from "cad/mdf/ui/DynamicComponentWidget";
-import {VectorResolver} from "cad/craft/schema/resolvers/vectorResolver";
+import {AxisResolver} from "cad/craft/schema/resolvers/axisResolver";
 
-export interface VectorWidgetProps extends FieldBasicProps {
+export interface AxisWidgetProps extends FieldBasicProps {
 
-  type: 'vector';
+  type: 'axis';
 
 }
 
 const ENTITY_CAPTURE = [EntityKind.EDGE, EntityKind.SKETCH_OBJECT, EntityKind.DATUM_AXIS, EntityKind.FACE];
 
-export const VectorWidgetDefinition = ({name, label}: VectorWidgetProps) => ({
+export const AxisWidgetDefinition = ({name, label}: AxisWidgetProps) => ({
 
   type: 'section',
 
@@ -29,7 +29,7 @@ export const VectorWidgetDefinition = ({name, label}: VectorWidgetProps) => ({
     {
       name: name,
       type: 'sub-form',
-      resolve: VectorResolver,
+      resolve: AxisResolver,
       content: [
         {
           name: "vectorEntity",
