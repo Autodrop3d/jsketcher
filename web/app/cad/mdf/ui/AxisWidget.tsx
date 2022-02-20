@@ -40,7 +40,6 @@ export interface AxisWidgetProps extends FieldBasicProps {
 
   type: 'axis';
 
-  resolve: ValueResolver<AxisInput, any>;
 }
 
 const ENTITY_CAPTURE = [EntityKind.EDGE, EntityKind.SKETCH_OBJECT, EntityKind.DATUM_AXIS, EntityKind.FACE];
