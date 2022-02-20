@@ -64,6 +64,7 @@ export const AxisBasedWidgetDefinition = (props: AxisBasedWidgetProps) => ({
       type: 'sub-form',
       name: props.name,
       resolve: props.resolve,
+      optional: props.optional,
       content: [
         {
           name: "vectorEntity",
