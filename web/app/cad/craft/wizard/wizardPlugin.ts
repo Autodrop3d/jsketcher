@@ -165,7 +165,7 @@ export function activate(ctx: ApplicationContext) {
 
     workingRequest$, materializedWorkingRequest$, state$,
     updateParams, updateParam, readParam, updateState,
-    addDisposer: disposerList.add
+    addDisposer: (disposer) => disposerList.add(disposer)
   };
 
   ctx.wizardService = services.wizard = wizardService;

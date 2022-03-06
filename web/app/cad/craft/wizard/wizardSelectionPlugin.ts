@@ -37,12 +37,12 @@ export const WizardSelectionPlugin: Plugin<WizardSelectionPluginInputContext, Wi
         if (wizardPickHandler === null) {
           wizardPickHandler = createPickHandlerFromSchema(wizardService);
           ctx.pickControlService.setPickHandler(wizardPickHandler);
+          ctx.wizardService.addDisposer(() => {
+            console.log("DISPOSE!!!!");
+            wizardPickHandler = null;
+            ctx.pickControlService.setPickHandler(null);
+          });
         }
-
-        ctx.wizardService.addDisposer(() => {
-          wizardPickHandler = null;
-          ctx.pickControlService.setPickHandler(null);
-        });
 
         const marker = ctx.markerService;
         marker.startSession();
